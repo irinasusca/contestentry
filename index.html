@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Irina Susca</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@200..700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <main>
+        <div class="nav-container">
+            <nav class="navbar">
+                <div class="col">
+                    <div class="flex-wrap">
+                        
+                        <a class="navitem">Home</a>
+                    </div>
+                </div>
+    
+                <div class="col-auto">
+                    <div class="flex-wrap">
+                        <a class="navitem">Order</a>
+                        <a class="navitem">About us</a>
+                        <div id="dropdown">
+                            <div class="dropdown-toggle"><img  src="navigation.png"></div>
+                            <div id="dropdown-menu">
+                                <div class="dropdown-wrapper">
+                                    <a>Catering</a>
+                                    <a>Locations</a>
+                                    <a>Join us</a>
+                                    <a>Contact us</a>
+                                </div>
+                            </div>
+                        </div>
+    
+                    </div>
+    
+                </div>
+            </nav>
+        </div>
+        
+        
+
+
+            <div class="text-wrapper">
+                <div class="text">Sorry, we couldn't find that page.</div>
+                
+                <div class="text">Wipe up the mess, send us a screenshot, and get a <span>free coffee</span>!</div>
+
+                <!--<div class="err"><p>404</p></div> -->
+
+               
+            </div>
+            <div class="cup-wrapper">
+                 <!--<div class="go-back">Wipe up the mess, or just <a>go back home</a></div>-->
+                <div class="cup-container">
+                    <div class="background"></div>
+                <!-- <img src="cup.png" alt="Cup on Table" class="background">-->
+                <canvas id="spill-canvas"></canvas>
+                <div class="error-text">404</div>
+            </div>
+            </div>
+
+            
+           
+
+        
+    </main>
+    <footer>
+      
+    </footer>
+	<script >
+        
+        const dropdownmenu =document.getElementById("dropdown-menu");
+        const dropdown = document.getElementById("dropdown");
+        dropdown.addEventListener('mouseover', () => {
+            dropdownmenu.style.display = 'flex';
+            dropdownmenu.style.opacity="1"; // Show the hidden box
+        });
+
+        // Hide the hidden box when not hovering
+        dropdown.addEventListener('mouseout', () => {
+            dropdownmenu.style.display = 'none'; // Hide the hidden box
+        });
+
+        const canvas = document.getElementById('spill-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Load the spill image
+        const spillImage = new Image();
+        spillImage.src = 'spill.png'; // Spill-only image
+
+        
+
+
+        spillImage.onload = () => {
+        // Set the canvas size to match the spill image
+        const container = document.querySelector('.cup-container');
+
+    // Match canvas size to the container
+        canvas.width = container.offsetWidth;
+        canvas.height = container.offsetHeight;
+        console.log('Container dimensions:', container.offsetWidth, container.offsetHeight);
+    console.log('Canvas dimensions:', canvas.width, canvas.height);
+    console.log('Spill image dimensions:', spillImage.width, spillImage.height);
+
+        // Draw the spill image onto the canvas
+        ctx.drawImage(spillImage, 0, 0 ,canvas.width, canvas.height);
+        };
+
+        // Erasing mechanism
+        let isDrawing = false;
+
+        canvas.addEventListener('mousedown', () => (isDrawing = true));
+        canvas.addEventListener('mouseup', () => (isDrawing = false));
+        canvas.addEventListener('mousemove', (event) => {
+        if (!isDrawing) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        // Simulate "erasing" by clearing the area
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(x, y, 40, 0, Math.PI * 2); // Adjust eraser size here
+        ctx.fill();
+        ctx.globalCompositeOperation = 'source-over';
+        });
+
+
+    </script>
+  </body>
+</html>
